@@ -45,20 +45,17 @@ struct FixtureCard: View {
                             .frame(width: 50, height: 50, alignment: .center)
                     } else {
                         //RemoteImage(url: homeTeamLogoUrl)
-                        SVGLogo(SVGUrl: homeTeamLogoUrl)
-                            .scaleEffect(CGSize(width: (1.0/4), height: (1.0/4)))
+                        SVGLogo(SVGUrl: homeTeamLogoUrl, frameWidth: 50, frameHeight: 50)
                             .frame(width: 50, height: 50, alignment: .center)
                     }
                     //Image(systemName: "photo")
                     
-                    VStack {
-                        Text(gameStatus == "Scheduled" ? "" : String(homeTeamScore))
-                            .font(.title.bold())
-                        Text(homeTeamCity)
-                            .font(.title3)
-                        Text(homeTeamName)
-                            .font(.title3)
-                    }.padding(.top)
+                    Text(gameStatus == "Scheduled" ? "" : String(homeTeamScore))
+                        .font(.title.bold())
+                    Text(homeTeamCity)
+                        .font(.title3)
+                    Text(homeTeamName)
+                        .font(.title3)
                 }
                 
                 Spacer()
@@ -76,19 +73,16 @@ struct FixtureCard: View {
                             .frame(width: 50, height: 50, alignment: .center)
                     } else {
                         //RemoteImage(url: homeTeamLogoUrl)
-                        SVGLogo(SVGUrl: awayTeamLogoUrl)
-                            .scaleEffect(CGSize(width: (1.0/4), height: (1.0/4)))
+                        SVGLogo(SVGUrl: awayTeamLogoUrl, frameWidth: 50, frameHeight: 50)
                             .frame(width: 50, height: 50, alignment: .center)
                     }
                     
-                    VStack {
-                        Text(gameStatus == "Scheduled" ? "" : String(awayTeamScore))
-                            .font(.title.bold())
-                        Text(awayTeamCity)
-                            .font(.title3)
-                        Text(awayTeamName)
-                            .font(.title3)
-                    }.padding(.top)
+                    Text(gameStatus == "Scheduled" ? "" : String(awayTeamScore))
+                        .font(.title.bold())
+                    Text(awayTeamCity)
+                        .font(.title3)
+                    Text(awayTeamName)
+                        .font(.title3)
                 }
                 Spacer()
                 

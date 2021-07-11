@@ -11,36 +11,27 @@ import SVGKit
 struct SVGLogo: UIViewRepresentable {
     
     var SVGUrl: String
-        
+    let frameWidth: Int
+    let frameHeight: Int
+    
     func makeUIView(context: Context) -> UIImageView {
         
-        //var SVGData = Data()
-        
         let svg = URL(string: SVGUrl)!
-         let data = try? Data(contentsOf: svg)
+        let data = try? Data(contentsOf: svg)
         
         let imgViewObj = UIImageView()
         let logoSVG:SVGKImage = SVGKImage(data: data)
         
-        imgViewObj.image = logoSVG.uiImage
-        
-//        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-//         imgViewObj.frame.size = CGSize(width: containerView.frame.width, height: containerView.frame.height)
+        logoSVG.scaleToFit(inside: CGSize(width: self.frameWidth, height: self.frameHeight))
         
         imgViewObj.contentMode = .scaleAspectFit
         
-        
-        // resize svg, doesn't work
-               
+        imgViewObj.image = logoSVG.uiImage
         
         return imgViewObj
     }
     
-    func updateUIView(_ uiView: UIImageView, context: Context) {
-        
-        // update element if needed
-        
-    }
+    func updateUIView(_ uiView: UIImageView, context: Context) {}
     
 }
 

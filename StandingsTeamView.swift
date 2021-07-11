@@ -27,8 +27,8 @@ struct StandingsTeamView: View {
                     .resizable()
                     .frame(width: 25, height: 25, alignment: .center).padding(.leading)
             } else {
-                SVGLogo(SVGUrl: logoURL)
-                    .scaleEffect(CGSize(width: (1.0/7), height: (1.0/7)))
+                SVGLogo(SVGUrl: logoURL, frameWidth: 25, frameHeight: 25)
+//                    .scaleEffect(CGSize(width: (1.0/7), height: (1.0/7)))
                     .frame(width: 25, height: 25, alignment: .center).padding(.leading)
             }
             
