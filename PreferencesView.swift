@@ -10,13 +10,36 @@ import SwiftUI
 struct PreferencesView: View {
     
     @State var teams = [Teams]()
+    @State var favouriteTeam = 11
+    @State var favouriteTeamName = ""
+    
+    @State private var bgColor = Color.red
     
     var body: some View {
         NavigationView {
-            List {
-                ForEach(self.teams, id: \.TeamID) {
-                    team in
-                    Text(team.Name)
+            VStack {
+                Form {
+                    Section {
+                        Picker("Favourite team", selection: $favouriteTeam, content: {
+                            ForEach(self.teams, id: \.TeamID) {
+                                team in
+                                HStack {
+                                        SVGLogo(SVGUrl: team.WikipediaLogoUrl, frameWidth: 25, frameHeight: 25)
+                                            .frame(width: 25, height: 25, alignment: .center).padding(.leading)
+                                        Text("\(team.City) \(team.Name)")
+                                    }
+                            }
+                        })
+                        
+                        ColorPicker("Accent color", selection: $bgColor)
+                    }
+                    
+                    Section {
+                        Button("Save changes"){
+                            self.favouriteTeamName = teams[favouriteTeam-1].Name
+                        }
+                    }
+                    
                 }
             }.navigationTitle("Preferences")
             
