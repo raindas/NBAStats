@@ -57,7 +57,9 @@ final class ViewModel: ObservableObject {
             if let data = data {
                 do {
                     let decodedResponse = try JSONDecoder().decode([Fixtures].self, from: data)
-                    self.fixtures = decodedResponse
+                    DispatchQueue.main.async {
+                        self.fixtures = decodedResponse
+                    }
                     return
                 } catch {
                     print("Unable to decode JSON -> \(error)")
@@ -87,11 +89,13 @@ final class ViewModel: ObservableObject {
                 do {
                     let decodedResponse = try JSONDecoder().decode([Teams].self, from: data)
                     let filteredDecodedResponse = decodedResponse.filter { $0.TeamID == teamID }
-                    self.teams = filteredDecodedResponse
-                    for team in self.teams {
-                        self.homeTeamCity = team.City
-                        self.homeTeamName = team.Name
-                        self.homeTeamLogoUrl = team.WikipediaLogoUrl
+                    DispatchQueue.main.async {
+                        self.teams = filteredDecodedResponse
+                        for team in self.teams {
+                            self.homeTeamCity = team.City
+                            self.homeTeamName = team.Name
+                            self.homeTeamLogoUrl = team.WikipediaLogoUrl
+                        }
                     }
                     return
                 } catch {
@@ -114,11 +118,13 @@ final class ViewModel: ObservableObject {
                 do {
                     let decodedResponse = try JSONDecoder().decode([Teams].self, from: data)
                     let filteredDecodedResponse = decodedResponse.filter { $0.TeamID == teamID }
-                    self.teams = filteredDecodedResponse
-                    for team in self.teams {
-                        self.awayTeamCity = team.City
-                        self.awayTeamName = team.Name
-                        self.awayTeamLogoUrl = team.WikipediaLogoUrl
+                    DispatchQueue.main.async {
+                        self.teams = filteredDecodedResponse
+                        for team in self.teams {
+                            self.awayTeamCity = team.City
+                            self.awayTeamName = team.Name
+                            self.awayTeamLogoUrl = team.WikipediaLogoUrl
+                        }
                     }
                     return
                 } catch {
@@ -145,7 +151,9 @@ final class ViewModel: ObservableObject {
                     let decodedResponse = try JSONDecoder().decode([Standings].self, from: data)
                     //print("Teams decoded response -> \(decodedResponse)")
                     let filteredDecodedResponse = decodedResponse.filter { $0.Conference == self.conferenceSelection }
-                    self.standings = filteredDecodedResponse
+                    DispatchQueue.main.async {
+                        self.standings = filteredDecodedResponse
+                    }
                     return
                 } catch {
                     print("Unable to fetch team logo URL")
@@ -169,11 +177,12 @@ final class ViewModel: ObservableObject {
                     let decodedResponse = try JSONDecoder().decode([Teams].self, from: data)
                     //print("Teams decoded response -> \(decodedResponse)")
                     let filteredDecodedResponse = decodedResponse.filter { $0.TeamID == teamID }
-                    self.teams = filteredDecodedResponse
-                    for team in self.teams {
-                        self.standingTeamlogoURL = team.WikipediaLogoUrl
+                    DispatchQueue.main.async {
+                        self.teams = filteredDecodedResponse
+                        for team in self.teams {
+                            self.standingTeamlogoURL = team.WikipediaLogoUrl
+                        }
                     }
-                    return
                 } catch {
                     print("Unable to fetch team logo URL")
                 }
