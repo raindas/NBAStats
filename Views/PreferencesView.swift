@@ -10,18 +10,15 @@ import SwiftUI
 struct PreferencesView: View {
     
     @EnvironmentObject var preferences:Preferences
-    
-    @State var teams = [Teams]()
-    @State var CurrentFavouriteTeamIndex = Preferences().favouriteTeamIndex
-    @State private var CurrentAccentColor = Preferences().accentColor
+    @EnvironmentObject var vm:ViewModel
     
     var body: some View {
         NavigationView {
             VStack {
                 Form {
                     Section {
-                        Picker("Favourite team", selection: $CurrentFavouriteTeamIndex, content: {
-                            ForEach(self.teams, id: \.TeamID) {
+                        Picker("Favourite team", selection: self.$vm.CurrentFavouriteTeamIndex, content: {
+                            ForEach(vm.teams, id: \.TeamID) {
                                 team in
                                 HStack {
                                         SVGLogo(SVGUrl: team.WikipediaLogoUrl, frameWidth: 25, frameHeight: 25)
@@ -29,12 +26,12 @@ struct PreferencesView: View {
                                         Text("\(team.City) \(team.Name)")
                                     }
                             }
-                        }).onChange(of: CurrentFavouriteTeamIndex, perform: { _ in
-                            let FavTeamID = teams[CurrentFavouriteTeamIndex-1].TeamID
-                            preferences.saveFavouriteTeam(teamIndex: CurrentFavouriteTeamIndex, teamID: FavTeamID)
+                        }).onChange(of: vm.CurrentFavouriteTeamIndex, perform: { _ in
+                            let FavTeamID = vm.teams[vm.CurrentFavouriteTeamIndex-1].TeamID
+                            preferences.saveFavouriteTeam(teamIndex: vm.CurrentFavouriteTeamIndex, teamID: FavTeamID)
                         })
                         
-                        Picker("Accent color", selection: $CurrentAccentColor, content: {
+                        Picker("Accent color", selection: self.$vm.CurrentAccentColor, content: {
                             ForEach(preferences.colorListKeys, id:\.self) {
                                 colorName in
                                 HStack {
@@ -44,46 +41,22 @@ struct PreferencesView: View {
                                     Text(colorName)
                                 }
                             }
-                        }).onChange(of: CurrentAccentColor, perform: { _ in
-                            preferences.saveAccentColor(colorName: CurrentAccentColor)
+                        }).onChange(of: vm.CurrentAccentColor, perform: { _ in
+                            preferences.saveAccentColor(colorName: vm.CurrentAccentColor)
                         })
                     }
                 }
             }.navigationTitle("Preferences")
             
-        }.onAppear(perform: fetchTeams).accentColor(preferences.selectedAccentColor)
+        }.onAppear(perform: vm.fetchTeams).accentColor(preferences.selectedAccentColor)
     }
-    // fetch teams
-    func fetchTeams() {
-        let urlString = "https://fly.sportsdata.io/v3/nba/scores/json/teams?key=d8f7758d1d7a444097f1cf0b06e018a5"
-        
-        guard let url = URL(string: urlString) else {
-            print("Invalid URL")
-            return
-        }
-        
-        let request = URLRequest(url: url)
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data {
-                let decodedResponse = try? JSONDecoder().decode([Teams].self, from: data)
-                if let decodedResponse = decodedResponse {
-                    //print(decodedResponse)
-                    DispatchQueue.main.async {
-                        self.teams = decodedResponse
-                    }
-                    return
-                }
-            }
-            print("Teams fetch request failed: \(error?.localizedDescription ?? "Unknown Error")")
-//            alertMsg = error?.localizedDescription ?? "Unknown Error"
-//            alertTrigger.toggle()
-        }.resume()
-    }
+    
 }
 
 struct PreferencesView_Previews: PreviewProvider {
     static var previews: some View {
-        PreferencesView().environmentObject(Preferences())
+        PreferencesView()
+            .environmentObject(Preferences())
+            .environmentObject(ViewModel())
     }
 }

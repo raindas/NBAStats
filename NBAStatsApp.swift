@@ -11,6 +11,7 @@ import SwiftUI
 struct NBAStatsApp: App {
     
     @StateObject var preferences = Preferences()
+    @StateObject var vm = ViewModel()
     
     var body: some Scene {
         WindowGroup {
@@ -18,7 +19,10 @@ struct NBAStatsApp: App {
                 FixturesView().tabItem { Label("Fixtures", systemImage: "sportscourt") }
                 StandingsView().tabItem { Label("Standings", systemImage: "list.dash") }
                 PreferencesView().tabItem { Label("Preferences", systemImage: "gearshape") }
-            }.accentColor(preferences.selectedAccentColor).environmentObject(preferences)
+            }
+            .accentColor(preferences.selectedAccentColor)
+            .environmentObject(preferences)
+            .environmentObject(vm)
         }
     }
 }

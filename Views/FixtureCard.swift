@@ -10,6 +10,7 @@ import SwiftUI
 struct FixtureCard: View {
     
     @EnvironmentObject var preferences:Preferences
+    @EnvironmentObject var vm:ViewModel
     
     var dateController = DateController()
     @State var teams = [Teams]()
@@ -25,14 +26,6 @@ struct FixtureCard: View {
     let awayTeamID: Int
     let homeTeamID: Int
     
-    @State var homeTeamCity = "--"
-    @State var homeTeamName = "--"
-    
-    @State var awayTeamCity = "--"
-    @State var awayTeamName = "--"
-    
-    @State var homeTeamLogoUrl = ""
-    @State var awayTeamLogoUrl = ""
     
     // check if team fixture contains user's favourite team
     // if it does, change the background color to accent color to signify
@@ -67,13 +60,13 @@ struct FixtureCard: View {
                 Spacer()
                 
                 VStack {
-                    if homeTeamLogoUrl == "" {
+                    if vm.homeTeamLogoUrl == "" {
                         Image(systemName: "photo")
                             .resizable()
                             .frame(width: 50, height: 50, alignment: .center)
                     } else {
                         //RemoteImage(url: homeTeamLogoUrl)
-                        SVGLogo(SVGUrl: homeTeamLogoUrl, frameWidth: 50, frameHeight: 50)
+                        SVGLogo(SVGUrl: vm.homeTeamLogoUrl, frameWidth: 50, frameHeight: 50)
                             .frame(width: 50, height: 50, alignment: .center)
                     }
                     //Image(systemName: "photo")
@@ -81,9 +74,9 @@ struct FixtureCard: View {
                     Group {
                         Text(gameStatus == "Scheduled" ? "" : String(homeTeamScore))
                             .font(.title.bold())
-                        Text(homeTeamCity)
+                        Text(vm.homeTeamCity)
                             .font(.title3)
-                        Text(homeTeamName)
+                        Text(vm.homeTeamName)
                             .font(.title3)
                     }.foregroundColor(self.textForegroundColor)
                 }
@@ -97,22 +90,22 @@ struct FixtureCard: View {
                 Spacer()
                 
                 VStack {
-                    if awayTeamLogoUrl == "" {
+                    if vm.awayTeamLogoUrl == "" {
                         Image(systemName: "photo")
                             .resizable()
                             .frame(width: 50, height: 50, alignment: .center)
                     } else {
                         //RemoteImage(url: homeTeamLogoUrl)
-                        SVGLogo(SVGUrl: awayTeamLogoUrl, frameWidth: 50, frameHeight: 50)
+                        SVGLogo(SVGUrl: vm.awayTeamLogoUrl, frameWidth: 50, frameHeight: 50)
                             .frame(width: 50, height: 50, alignment: .center)
                     }
                     
                     Group {
                         Text(gameStatus == "Scheduled" ? "" : String(awayTeamScore))
                             .font(.title.bold())
-                        Text(awayTeamCity)
+                        Text(vm.awayTeamCity)
                             .font(.title3)
-                        Text(awayTeamName)
+                        Text(vm.awayTeamName)
                             .font(.title3)
                     }.foregroundColor(self.textForegroundColor)
                 }
@@ -127,72 +120,15 @@ struct FixtureCard: View {
         .background(self.cardBackgroundColor)
         .cornerRadius(25)
         .onAppear {
-            fetchTeamDetails(homeTeamID: homeTeamID, awayTeamID: awayTeamID)
+            vm.fetchTeamDetails(homeTeamID: homeTeamID, awayTeamID: awayTeamID)
         }
-    }
-    // fetch teams full details
-    func fetchTeamDetails(homeTeamID: Int, awayTeamID: Int) {
-        fetchHomeTeamFullDetails(teamID: homeTeamID)
-        fetchAwayTeamFullDetails(teamID: awayTeamID)
-    }
-    
-    func fetchHomeTeamFullDetails(teamID: Int) {
-        let urlString = "https://fly.sportsdata.io/v3/nba/scores/json/teams?key=d8f7758d1d7a444097f1cf0b06e018a5"
-        guard let url = URL(string: urlString) else {
-            print("Invalid URL")
-            return
-        }
-        let request = URLRequest(url: url)
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data {
-                do {
-                    let decodedResponse = try JSONDecoder().decode([Teams].self, from: data)
-                    let filteredDecodedResponse = decodedResponse.filter { $0.TeamID == teamID }
-                    self.teams = filteredDecodedResponse
-                    for team in teams {
-                        self.homeTeamCity = team.City
-                        self.homeTeamName = team.Name
-                        self.homeTeamLogoUrl = team.WikipediaLogoUrl
-                    }
-                    return
-                } catch {
-                    print("Unable to filter home team")
-                }
-            }
-            print("Home Team fetch request failed: \(error?.localizedDescription ?? "Unknown Error")")
-        }.resume()
-    }
-    
-    func fetchAwayTeamFullDetails(teamID: Int) {
-        let urlString = "https://fly.sportsdata.io/v3/nba/scores/json/teams?key=d8f7758d1d7a444097f1cf0b06e018a5"
-        guard let url = URL(string: urlString) else {
-            print("Invalid URL")
-            return
-        }
-        let request = URLRequest(url: url)
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data {
-                do {
-                    let decodedResponse = try JSONDecoder().decode([Teams].self, from: data)
-                    let filteredDecodedResponse = decodedResponse.filter { $0.TeamID == teamID }
-                    self.teams = filteredDecodedResponse
-                    for team in teams {
-                        self.awayTeamCity = team.City
-                        self.awayTeamName = team.Name
-                        self.awayTeamLogoUrl = team.WikipediaLogoUrl
-                    }
-                    return
-                } catch {
-                    print("Unable to filter away team")
-                }
-            }
-            print("Away Team fetch request failed: \(error?.localizedDescription ?? "Unknown Error")")
-        }.resume()
     }
 }
 
 struct FixtureCard_Previews: PreviewProvider {
     static var previews: some View {
-        FixtureCard(fixtureDaySelection: .constant(""), homeTeam: "--", awayTeam: "--", homeTeamScore: 0, awayTeamScore: 0, gameTime: "2021-07-08T21:00:00", gameStatus: "--", awayTeamID: 0, homeTeamID: 0).environmentObject(Preferences())
+        FixtureCard(fixtureDaySelection: .constant(""), homeTeam: "--", awayTeam: "--", homeTeamScore: 0, awayTeamScore: 0, gameTime: "2021-07-08T21:00:00", gameStatus: "--", awayTeamID: 0, homeTeamID: 0)
+            .environmentObject(Preferences())
+            .environmentObject(ViewModel())
     }
 }
