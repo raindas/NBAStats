@@ -48,6 +48,18 @@ struct FixtureCard: View {
         }
     }
     
+    var textForegroundColor: Color {
+        let favTeamID = Preferences().favouriteTeamID
+        let textColor = Preferences().teamCardTextColor
+        if favTeamID == homeTeamID {
+            return textColor
+        } else if favTeamID == awayTeamID {
+            return textColor
+        } else {
+            return Color.primary
+        }
+    }
+    
     var body: some View {
         VStack {
             HStack {
@@ -66,19 +78,21 @@ struct FixtureCard: View {
                     }
                     //Image(systemName: "photo")
                     
-                    Text(gameStatus == "Scheduled" ? "" : String(homeTeamScore))
-                        .font(.title.bold())
-                    Text(homeTeamCity)
-                        .font(.title3)
-                    Text(homeTeamName)
-                        .font(.title3)
+                    Group {
+                        Text(gameStatus == "Scheduled" ? "" : String(homeTeamScore))
+                            .font(.title.bold())
+                        Text(homeTeamCity)
+                            .font(.title3)
+                        Text(homeTeamName)
+                            .font(.title3)
+                    }.foregroundColor(self.textForegroundColor)
                 }
                 
                 Spacer()
                 
                 Text("VS")
                     .font(.largeTitle.bold())
-                    .foregroundColor(.secondary)
+                    .foregroundColor(self.textForegroundColor)
                 
                 Spacer()
                 
@@ -93,20 +107,22 @@ struct FixtureCard: View {
                             .frame(width: 50, height: 50, alignment: .center)
                     }
                     
-                    Text(gameStatus == "Scheduled" ? "" : String(awayTeamScore))
-                        .font(.title.bold())
-                    Text(awayTeamCity)
-                        .font(.title3)
-                    Text(awayTeamName)
-                        .font(.title3)
+                    Group {
+                        Text(gameStatus == "Scheduled" ? "" : String(awayTeamScore))
+                            .font(.title.bold())
+                        Text(awayTeamCity)
+                            .font(.title3)
+                        Text(awayTeamName)
+                            .font(.title3)
+                    }.foregroundColor(self.textForegroundColor)
                 }
                 Spacer()
                 
             }.padding(.vertical)
             Text(dateController.to12HoursEST(USEasternDateTime: gameTime))
-                .foregroundColor(.secondary)
+                .foregroundColor(self.textForegroundColor)
             Text(dateController.to12HoursWAT(USEasternDateTime: gameTime))
-                .foregroundColor(.secondary)
+                .foregroundColor(self.textForegroundColor)
         }.padding()
         .background(self.cardBackgroundColor)
         .cornerRadius(25)

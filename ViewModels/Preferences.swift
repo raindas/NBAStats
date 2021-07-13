@@ -34,8 +34,27 @@ class Preferences: ObservableObject {
     @Published var favouriteTeamIndex = UserDefaults.standard.integer(forKey: "FavouriteTeamIndex")
     @Published var favouriteTeamID = UserDefaults.standard.integer(forKey: "FavouriteTeamID")
     @Published var accentColor = UserDefaults.standard.string(forKey: "AccentColor") ?? "Gray" //<-- default accent color
+    
     var selectedAccentColor: Color {
         return self.colorList[self.accentColor]!
+    }
+    
+    var SegmentedPickerTextColor: UIColor {
+        let colors = ["Blue","Brown","Green","Indigo","Orange","Pink","Purple","Red","Teal","Yellow","Gray","Gray 2","Gray 3"]
+        if colors.contains(self.accentColor) {
+            return UIColor.white
+        } else {
+            return UIColor.black
+        }
+    }
+    
+    var teamCardTextColor: Color {
+        let colors = ["Blue","Brown","Green","Indigo","Orange","Pink","Purple","Red","Teal","Yellow","Gray","Gray 2"]
+        if colors.contains(self.accentColor) {
+            return Color.white
+        } else {
+            return Color.black
+        }
     }
     
     func saveFavouriteTeam(teamIndex: Int, teamID: Int) {

@@ -16,7 +16,7 @@ struct StandingsView: View {
     
     init() {
         UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Preferences().selectedAccentColor)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor : UIColor.white], for: .selected)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor : Preferences().SegmentedPickerTextColor], for: .selected)
     }
     
     var body: some View {
