@@ -9,16 +9,16 @@ import SwiftUI
 
 class Preferences: ObservableObject {
     let colorList = [
-        "Blue" : Color.blue,
+        "Blue" : Color(.systemBlue),
         "Brown" : Color(.brown),
-        "Green" : Color.green,
+        "Green" : Color(.systemGreen),
         "Indigo" : Color(.systemIndigo),
-        "Orange" : Color.orange,
-        "Pink" : Color.pink,
-        "Purple" : Color.purple,
-        "Red" : Color.red,
+        "Orange" : Color(.systemOrange),
+        "Pink" : Color(.systemPink),
+        "Purple" : Color(.systemPurple),
+        "Red" : Color(.systemRed),
         "Teal" : Color(.systemTeal),
-        "Yellow" : Color.yellow,
+        "Yellow" : Color(.systemYellow),
         "Gray" : Color(.systemGray),
         "Gray 2" : Color(.systemGray2),
         "Gray 3" : Color(.systemGray3),
