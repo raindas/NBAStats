@@ -43,7 +43,7 @@ struct StandingsView: View {
                 ScrollView {
                     ForEach(standings, id:\.TeamID) {
                         team in
-                        StandingsTeamView(teamID: team.TeamID, teamName: team.Name, W: team.Wins, L: team.Losses, backgroundColor: preferences.favouriteTeamID == team.TeamID ? preferences.selectedAccentColor : Color(.systemGray6))
+                        StandingsTeamView(teamID: team.TeamID, teamName: team.Name, W: team.Wins, L: team.Losses, backgroundColor: preferences.favouriteTeamID == team.TeamID ? preferences.selectedAccentColor : Color(.systemGray6), foregroundColor: preferences.favouriteTeamID == team.TeamID ? preferences.teamCardTextColor : Color.primary)
                     }
                 }.padding(.horizontal)
                 

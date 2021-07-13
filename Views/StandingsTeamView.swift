@@ -17,6 +17,7 @@ struct StandingsTeamView: View {
     let W: Int
     let L: Int
     let backgroundColor: Color
+    let foregroundColor: Color
     
     @State var logoURL = ""
     
@@ -32,7 +33,7 @@ struct StandingsTeamView: View {
                     .frame(width: 25, height: 25, alignment: .center).padding(.leading)
             }
             
-            Text(teamName).padding(.leading)
+            Text(teamName).foregroundColor(foregroundColor).padding(.leading)
             Spacer()
             Text("\(W)-\(L)")
         }
@@ -73,6 +74,6 @@ struct StandingsTeamView: View {
 
 struct StandingsTeamView_Previews: PreviewProvider {
     static var previews: some View {
-        StandingsTeamView(teamID: 0, teamName: "__", W: 49, L: 23, backgroundColor: Color(.systemGray6))
+        StandingsTeamView(teamID: 0, teamName: "__", W: 49, L: 23, backgroundColor: Color(.systemGray6),foregroundColor: Color.black)
     }
 }
