@@ -9,8 +9,15 @@ import SwiftUI
 
 struct StandingsView: View {
     
+    @EnvironmentObject var preferences:Preferences
+    
     @State var conferenceSelection = "Eastern"
     @State var standings = [Standings]()
+    
+    init() {
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Preferences().selectedAccentColor)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor : UIColor.white], for: .selected)
+    }
     
     var body: some View {
         NavigationView {
@@ -36,14 +43,14 @@ struct StandingsView: View {
                 ScrollView {
                     ForEach(standings, id:\.TeamID) {
                         team in
-                        StandingsTeamView(teamID: team.TeamID, teamName: team.Name, W: team.Wins, L: team.Losses, backgroundColor: Color(.systemGray6))
+                        StandingsTeamView(teamID: team.TeamID, teamName: team.Name, W: team.Wins, L: team.Losses, backgroundColor: preferences.favouriteTeamID == team.TeamID ? preferences.selectedAccentColor : Color(.systemGray6))
                     }
                 }.padding(.horizontal)
                 
             }.navigationTitle("Standings").onAppear {
                 fetchStandings(conference: conferenceSelection)
             }
-        }
+        }.accentColor(preferences.selectedAccentColor)
     }
     // fetch standings
     func fetchStandings(conference: String) {
@@ -73,6 +80,6 @@ struct StandingsView: View {
 
 struct StandingsView_Previews: PreviewProvider {
     static var previews: some View {
-        StandingsView()
+        StandingsView().environmentObject(Preferences())
     }
 }

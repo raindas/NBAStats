@@ -9,9 +9,25 @@ import SwiftUI
 
 struct FixturesView: View {
     
+    @EnvironmentObject var preferences:Preferences
+    
     @State var fixtureDaySelection = "today"
     @State var fixtures = [Fixtures]()
     @State var teams = [Teams]()
+    
+    init() {
+        //this changes the "thumb" that selects between items
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Preferences().selectedAccentColor)
+        //and this changes the color for the whole "bar" background
+       // UISegmentedControl.appearance().backgroundColor = .purple
+
+        //this will change the font size
+        //UISegmentedControl.appearance().setTitleTextAttributes([.font : UIFont.preferredFont(forTextStyle: .largeTitle)], for: .normal)
+
+        //these lines change the text color for various states
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor : UIColor.white], for: .selected)
+        //UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor : UIColor.blue], for: .normal)
+    }
     
     var body: some View {
         NavigationView {
@@ -45,6 +61,7 @@ struct FixturesView: View {
         }.onAppear {
             fetchFixtures(when: fixtureDaySelection)
         }
+        .accentColor(preferences.selectedAccentColor)
     }
     
     // fet fixtures
@@ -109,5 +126,6 @@ struct FixturesView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         FixturesView()
+            .environmentObject(Preferences())
     }
 }

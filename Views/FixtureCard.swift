@@ -9,6 +9,8 @@ import SwiftUI
 
 struct FixtureCard: View {
     
+    @EnvironmentObject var preferences:Preferences
+    
     var dateController = DateController()
     @State var teams = [Teams]()
     
@@ -31,6 +33,20 @@ struct FixtureCard: View {
     
     @State var homeTeamLogoUrl = ""
     @State var awayTeamLogoUrl = ""
+    
+    // check if team fixture contains user's favourite team
+    // if it does, change the background color to accent color to signify
+    var cardBackgroundColor: Color {
+        let favTeamID = Preferences().favouriteTeamID
+        let accentColor = Preferences().selectedAccentColor
+        if favTeamID == homeTeamID {
+            return accentColor
+        } else if favTeamID == awayTeamID {
+            return accentColor
+        } else {
+            return Color(.systemGray6)
+        }
+    }
     
     var body: some View {
         VStack {
@@ -92,7 +108,7 @@ struct FixtureCard: View {
             Text(dateController.to12HoursWAT(USEasternDateTime: gameTime))
                 .foregroundColor(.secondary)
         }.padding()
-        .background(Color(.systemGray6))
+        .background(self.cardBackgroundColor)
         .cornerRadius(25)
         .onAppear {
             fetchTeamDetails(homeTeamID: homeTeamID, awayTeamID: awayTeamID)
@@ -115,7 +131,6 @@ struct FixtureCard: View {
             if let data = data {
                 do {
                     let decodedResponse = try JSONDecoder().decode([Teams].self, from: data)
-                    //print("Teams decoded response -> \(decodedResponse)")
                     let filteredDecodedResponse = decodedResponse.filter { $0.TeamID == teamID }
                     self.teams = filteredDecodedResponse
                     for team in teams {
@@ -123,7 +138,6 @@ struct FixtureCard: View {
                         self.homeTeamName = team.Name
                         self.homeTeamLogoUrl = team.WikipediaLogoUrl
                     }
-                    //print("Filterd team ID (\(teamID)) -> \(filteredDecodedResponse)")
                     return
                 } catch {
                     print("Unable to filter home team")
@@ -144,7 +158,6 @@ struct FixtureCard: View {
             if let data = data {
                 do {
                     let decodedResponse = try JSONDecoder().decode([Teams].self, from: data)
-                    //print("Teams decoded response -> \(decodedResponse)")
                     let filteredDecodedResponse = decodedResponse.filter { $0.TeamID == teamID }
                     self.teams = filteredDecodedResponse
                     for team in teams {
@@ -152,7 +165,6 @@ struct FixtureCard: View {
                         self.awayTeamName = team.Name
                         self.awayTeamLogoUrl = team.WikipediaLogoUrl
                     }
-                    //print("Filterd team ID (\(teamID)) -> \(filteredDecodedResponse)")
                     return
                 } catch {
                     print("Unable to filter away team")
@@ -165,6 +177,6 @@ struct FixtureCard: View {
 
 struct FixtureCard_Previews: PreviewProvider {
     static var previews: some View {
-        FixtureCard(fixtureDaySelection: .constant(""), homeTeam: "--", awayTeam: "--", homeTeamScore: 0, awayTeamScore: 0, gameTime: "2021-07-08T21:00:00", gameStatus: "--", awayTeamID: 0, homeTeamID: 0)
+        FixtureCard(fixtureDaySelection: .constant(""), homeTeam: "--", awayTeam: "--", homeTeamScore: 0, awayTeamScore: 0, gameTime: "2021-07-08T21:00:00", gameStatus: "--", awayTeamID: 0, homeTeamID: 0).environmentObject(Preferences())
     }
 }
