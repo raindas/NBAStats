@@ -35,7 +35,7 @@ struct StandingsTeamView: View {
             
             Text(teamName).foregroundColor(foregroundColor).padding(.leading)
             Spacer()
-            Text("\(W)-\(L)")
+            Text("\(W)-\(L)").foregroundColor(foregroundColor)
         }
         .padding()
         .background(backgroundColor)
