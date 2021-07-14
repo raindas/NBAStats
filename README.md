@@ -22,8 +22,8 @@ Clone the Repository, should build right away on your xcode.
 - [Email 2 - adesanyasegun299@outlook.com](mailto:adesanyasegun299@outlook.com)
 
 ## Screenshots
-
+![NBA Light mode](https://user-images.githubusercontent.com/65086989/125704199-1bc257f2-0403-477c-95c2-12ad3f3a35fb.jpg)
+![NBA Dark mode](https://user-images.githubusercontent.com/65086989/125704229-551f4061-a1f7-491c-961c-92255ee68553.jpg)
 
 ## Video
-https://user-images.githubusercontent.com/65086989/124413011-ad9b8880-dd47-11eb-8b10-5db6611fddc0.mp4
-
+https://user-images.githubusercontent.com/65086989/125704503-1642a56e-ffd2-43d4-bc60-478d8182421f.mp4
