@@ -18,7 +18,7 @@ struct PreferencesView: View {
                 Form {
                     Section {
                         Picker("Favourite team", selection: self.$vm.CurrentFavouriteTeamIndex, content: {
-                            ForEach(vm.teams, id: \.TeamID) {
+                            ForEach(vm.allTeams, id: \.TeamID) {
                                 team in
                                 HStack {
                                         SVGLogo(SVGUrl: team.WikipediaLogoUrl, frameWidth: 25, frameHeight: 25)
@@ -27,7 +27,7 @@ struct PreferencesView: View {
                                     }
                             }
                         }).onChange(of: vm.CurrentFavouriteTeamIndex, perform: { _ in
-                            let FavTeamID = vm.teams[vm.CurrentFavouriteTeamIndex-1].TeamID
+                            let FavTeamID = vm.allTeams[vm.CurrentFavouriteTeamIndex-1].TeamID
                             preferences.saveFavouriteTeam(teamIndex: vm.CurrentFavouriteTeamIndex, teamID: FavTeamID)
                         })
                         

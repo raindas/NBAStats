@@ -8,11 +8,12 @@
 import Foundation
 
 final class ViewModel: ObservableObject {
-    private let APIBaseURL = "https://fly.sportsdata.io/v3/nba/scores/json/"
-    private let APIKey = ""//<-- insert API key here
+    let APIBaseURL = "https://fly.sportsdata.io/v3/nba/scores/json/"
+    let APIKey = ""//<-- insert API key here
     @Published var fixtureDaySelection = "today"
     @Published var fixtures = [Fixtures]()
     @Published var teams = [Teams]()
+    @Published var allTeams = [Teams]()
     @Published var homeTeamCity = "--"
     @Published var homeTeamName = "--"
     @Published var awayTeamCity = "--"
@@ -21,7 +22,6 @@ final class ViewModel: ObservableObject {
     @Published var awayTeamLogoUrl = ""
     @Published var conferenceSelection = "Eastern"
     @Published var standings = [Standings]()
-    @Published var standingTeamlogoURL = ""
     @Published var CurrentFavouriteTeamIndex = Preferences().favouriteTeamIndex
     @Published var CurrentAccentColor = Preferences().accentColor
     
@@ -162,34 +162,6 @@ final class ViewModel: ObservableObject {
         }.resume()
     }
     
-    // get standing team logo URL
-    func fetchStandingTeamLogoURL(teamID: Int) {
-        let urlString = "\(APIBaseURL)teams?key=\(APIKey)"
-        guard let url = URL(string: urlString) else {
-            print("Invalid URL")
-            return
-        }
-        
-        let request = URLRequest(url: url)
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data {
-                do {
-                    let decodedResponse = try JSONDecoder().decode([Teams].self, from: data)
-                    //print("Teams decoded response -> \(decodedResponse)")
-                    let filteredDecodedResponse = decodedResponse.filter { $0.TeamID == teamID }
-                    DispatchQueue.main.async {
-                        self.teams = filteredDecodedResponse
-                        for team in self.teams {
-                            self.standingTeamlogoURL = team.WikipediaLogoUrl
-                        }
-                    }
-                } catch {
-                    print("Unable to fetch team logo URL")
-                }
-            }
-        }.resume()
-    }
-    
     // fetch all teams
     func fetchTeams() {
         let urlString = "\(APIBaseURL)teams?key=\(APIKey)"
@@ -207,7 +179,7 @@ final class ViewModel: ObservableObject {
                 if let decodedResponse = decodedResponse {
                     //print(decodedResponse)
                     DispatchQueue.main.async {
-                        self.teams = decodedResponse
+                        self.allTeams = decodedResponse
                     }
                     return
                 }
