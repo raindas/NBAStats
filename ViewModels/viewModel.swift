@@ -10,6 +10,7 @@ import Foundation
 final class ViewModel: ObservableObject {
     let APIBaseURL = "https://fly.sportsdata.io/v3/nba/scores/json/"
     let APIKey = ""//<-- insert API key here
+    private var dateController = DateController()
     @Published var fixtureDaySelection = "today"
     @Published var fixtures = [Fixtures]()
     @Published var teams = [Teams]()
@@ -35,13 +36,9 @@ final class ViewModel: ObservableObject {
             date = date.addingTimeInterval(86400) // Tomorrow -> plus 1 day (86400 seconds)
         }
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MMM-dd"
+        let fixtureDate = dateController.toEST(date)
         
-        // Since Nigeria (West African Time) is five hours ahead of the API's default US Eastern time, we'll have to set the date back to 5 hours before, hence, we need to subtract the value of 5 hours from the current date (in West African Time)
-        let fixtureDate = formatter.string(from: date.addingTimeInterval(-(3600 * 5)))// <-- 1 hour = 3600 seconds, thus 5 hours = 3600 seconds x 5
-        
-        print("Fixture date -> \(fixtureDate)")
+        //print("Fixture date -> \(fixtureDate)")
         
         let urlString = "\(APIBaseURL)GamesByDate/\(fixtureDate)?key=\(APIKey)"
         

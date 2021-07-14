@@ -37,7 +37,7 @@ struct StandingsTeamView: View {
             Text("\(W)-\(L)").foregroundColor(foregroundColor)
         }
         .padding()
-        .background(backgroundColor)
+        .background(backgroundColor.opacity(0.7))
         .cornerRadius(15)
         .onAppear {
             fetchStandingTeamLogoURL(teamID: teamID)

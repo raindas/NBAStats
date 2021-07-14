@@ -65,11 +65,9 @@ struct FixtureCard: View {
                             .resizable()
                             .frame(width: 50, height: 50, alignment: .center)
                     } else {
-                        //RemoteImage(url: homeTeamLogoUrl)
                         SVGLogo(SVGUrl: vm.homeTeamLogoUrl, frameWidth: 50, frameHeight: 50)
                             .frame(width: 50, height: 50, alignment: .center)
                     }
-                    //Image(systemName: "photo")
                     
                     Group {
                         Text(gameStatus == "Scheduled" ? "" : String(homeTeamScore))
@@ -95,7 +93,6 @@ struct FixtureCard: View {
                             .resizable()
                             .frame(width: 50, height: 50, alignment: .center)
                     } else {
-                        //RemoteImage(url: homeTeamLogoUrl)
                         SVGLogo(SVGUrl: vm.awayTeamLogoUrl, frameWidth: 50, frameHeight: 50)
                             .frame(width: 50, height: 50, alignment: .center)
                     }
@@ -112,12 +109,28 @@ struct FixtureCard: View {
                 Spacer()
                 
             }.padding(.vertical)
-            Text(dateController.to12HoursEST(USEasternDateTime: gameTime))
-                .foregroundColor(self.textForegroundColor)
-            Text(dateController.to12HoursWAT(USEasternDateTime: gameTime))
-                .foregroundColor(self.textForegroundColor)
+            
+            if gameStatus == "Scheduled" {
+                VStack {
+                    Text("Scheduled for")
+                    HStack {
+                        Text(dateController.DateTimeStringToDate(dateTime: gameTime), style: .time)
+                        Text("today,")
+                        Text("(EST - America/New York)")
+                    }
+                    
+                    HStack {
+                        Text(dateController.DateTimeToCurrentTimeZone(dateTime: gameTime), style: .time)
+                        Text("\(dateController.gameDay(dateTime: gameTime)),")
+                        Text("(\(TimeZone.current.identifier) - \(TimeZone.current.abbreviation()!))")
+                    }
+                    
+                }.foregroundColor(self.textForegroundColor)
+            } else {
+                Text(gameStatus).foregroundColor(self.textForegroundColor)
+            }
         }.padding()
-        .background(self.cardBackgroundColor)
+        .background(self.cardBackgroundColor.opacity(0.7))
         .cornerRadius(25)
         .onAppear {
             vm.fetchTeamDetails(homeTeamID: homeTeamID, awayTeamID: awayTeamID)

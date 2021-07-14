@@ -39,7 +39,6 @@ struct FixturesView: View {
                 .padding(.horizontal)
                 .onChange(of: vm.fixtureDaySelection) { fixtureDay in
                     vm.fetchFixtures(when: fixtureDay)
-                    print(fixtureDay)
                 }
                 
                 
